@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Search, Bell } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import { useLocation } from 'react-router-dom';
 
@@ -59,11 +59,6 @@ const Navbar: React.FC = () => {
 
 
 
-        <button className="p-2.5 rounded-lg transition-all relative"
-          style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
-          <Bell size={18} />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
-        </button>
       </div>
     </header>
   );
