@@ -20,32 +20,36 @@ const Navbar: React.FC = () => {
 
   return (
     <header
-      className="sticky top-0 z-30 flex items-center justify-between px-8 py-5 transition-all"
+      className="sticky top-0 z-30 flex items-center justify-between px-4 md:px-8 py-3 md:py-5 transition-all"
       style={{
         background: 'rgba(var(--bg-app-rgb), 0.8)',
         backdropFilter: 'blur(12px)',
         borderBottom: '1px solid var(--border-subtle)',
       }}
     >
-      <div className="flex items-center gap-5">
+      {/* Left Section: Menu for Mobile */}
+      <div className="flex items-center gap-2 md:gap-5">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="md:hidden p-2 rounded-lg transition-colors"
-          style={{ color: 'var(--text-muted)', background: 'var(--bg-surface)' }}
+          className="p-2 rounded-lg transition-colors hover:bg-[var(--bg-surface-hover)]"
+          style={{ color: 'var(--text-muted)' }}
         >
           <Menu size={20} />
         </button>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-main)', fontFamily: 'var(--font-heading)' }}>
-            {pageInfo.title}
-          </h2>
-          <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            {pageInfo.subtitle}
-          </p>
-        </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      {/* Middle Section: Title */}
+      <div className="flex-1 text-center md:text-left">
+        <h2 className="text-lg md:text-2xl font-bold tracking-tight truncate" style={{ color: 'var(--text-main)', fontFamily: 'var(--font-heading)' }}>
+          {pageInfo.title}
+        </h2>
+        <p className="hidden md:block text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          {pageInfo.subtitle}
+        </p>
+      </div>
+
+      {/* Right Section: Search/Actions */}
+      <div className="flex items-center gap-2 md:gap-4">
         <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg"
           style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-strong)' }}>
           <Search size={16} style={{ color: 'var(--text-muted)' }} />
@@ -56,9 +60,11 @@ const Navbar: React.FC = () => {
             style={{ color: 'var(--text-main)' }}
           />
         </div>
-
-
-
+        
+        {/* Mobile Search Button */}
+        <button className="md:hidden p-2 rounded-lg" style={{ color: 'var(--text-muted)' }}>
+          <Search size={20} />
+        </button>
       </div>
     </header>
   );

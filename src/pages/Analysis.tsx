@@ -94,31 +94,33 @@ const Analysis: React.FC = () => {
   const tabLabels = { summary: 'Executive Summary', clauses: 'Key Clauses', risks: 'Risk Analysis', simplified: 'Plain English' };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8 animate-slide-up pb-12">
+    <div className="px-4 md:px-8 py-4 md:py-8 max-w-6xl mx-auto space-y-6 md:space-y-8 animate-slide-up pb-12">
       {/* Document Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 pb-6 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-strong)', color: 'var(--brand-main)' }}>
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center border flex-shrink-0" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-strong)', color: 'var(--brand-main)' }}>
             <FileText size={24} />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold mb-1" style={{ color: 'var(--text-main)', fontFamily: 'var(--font-heading)' }}>{currentDocument.name}</h1>
-
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold mb-1 truncate" style={{ color: 'var(--text-main)', fontFamily: 'var(--font-heading)' }}>{currentDocument.name}</h1>
+            <span className={`inline-block md:hidden px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest badge-${summary.overall_risk_score || 'medium'}`}>
+               {summary.overall_risk_score || 'MEDIUM'} RISK
+            </span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4">
-          <span className={`px-4 py-1.5 rounded-md text-sm font-bold uppercase tracking-widest badge-${summary.overall_risk_score || 'medium'}`}>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className={`hidden md:inline-block px-4 py-1.5 rounded-md text-sm font-bold uppercase tracking-widest badge-${summary.overall_risk_score || 'medium'}`}>
              {summary.overall_risk_score || 'MEDIUM'} RISK
           </span>
 
-          <div className="flex rounded-lg overflow-hidden border" style={{ borderColor: 'var(--border-strong)' }}>
+          <div className="flex rounded-lg overflow-hidden border w-full md:w-auto" style={{ borderColor: 'var(--border-strong)' }}>
             {(['txt', 'docx', 'pdf'] as const).map((fmt) => (
               <button
                 key={fmt}
                 onClick={() => handleExport(fmt)}
                 disabled={exporting}
-                className="px-4 py-2 text-sm font-bold uppercase tracking-wider border-r last:border-r-0 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                className="flex-1 md:flex-none px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-wider border-r last:border-r-0 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderColor: 'var(--border-strong)' }}
               >
                 {fmt}
@@ -129,7 +131,7 @@ const Analysis: React.FC = () => {
       </div>
 
       {/* Quick stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {[
           { label: 'Key Points', val: summary.key_legal_points?.length || 0, icon: CheckCircle, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-900/30' },
           { label: 'Obligations', val: summary.obligations?.length || 0, icon: AlertCircle, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-100 dark:bg-amber-900/30' },
@@ -138,24 +140,24 @@ const Analysis: React.FC = () => {
         ].map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.label} className="premium-card p-6 flex flex-col items-center justify-center text-center">
-               <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${s.bg} ${s.color}`}>
-                  <Icon size={20} />
+            <div key={s.label} className="premium-card p-4 md:p-6 flex flex-col items-center justify-center text-center">
+               <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mb-2 md:mb-3 ${s.bg} ${s.color}`}>
+                  <Icon size={18} className="md:w-5 md:h-5" />
                </div>
-               <p className="text-3xl font-black mb-1" style={{ color: 'var(--text-main)', fontFamily: 'var(--font-heading)' }}>{s.val}</p>
-               <p className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>{s.label}</p>
+               <p className="text-2xl md:text-3xl font-black mb-0.5 md:mb-1" style={{ color: 'var(--text-main)', fontFamily: 'var(--font-heading)' }}>{s.val}</p>
+               <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>{s.label}</p>
             </div>
           );
         })}
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-wrap gap-2 p-1.5 rounded-xl border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}>
+      <div className="flex overflow-x-auto md:flex-wrap gap-2 p-1.5 rounded-xl border scrollbar-hide" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}>
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${
+            className={`flex-shrink-0 md:flex-1 py-2 px-4 rounded-lg text-xs md:text-sm font-bold transition-all whitespace-nowrap ${
                activeTab === tab ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
@@ -169,29 +171,29 @@ const Analysis: React.FC = () => {
          {/* Summary Tab */}
          {activeTab === 'summary' && (
             <div className="space-y-6">
-               <div className="premium-card p-8 bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-900/30">
-                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue-900 dark:text-blue-100">
-                     <Info size={20} className="text-blue-600 dark:text-blue-400" /> Executive Summary
+               <div className="premium-card p-5 md:p-8 bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-900/30">
+                  <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 flex items-center gap-2 text-blue-900 dark:text-blue-100">
+                     <Info size={18} className="text-blue-600 dark:text-blue-400" /> Executive Summary
                   </h3>
-                  <p className="text-blue-800 dark:text-blue-200 text-lg leading-relaxed">{summary.short_summary}</p>
+                  <p className="text-blue-800 dark:text-blue-200 text-base md:text-lg leading-relaxed">{summary.short_summary}</p>
                </div>
 
-               <div className="premium-card p-8">
-                  <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--text-main)' }}>Detailed Analysis</h3>
-                  <p className="leading-relaxed" style={{ color: 'var(--text-muted)' }}>{summary.detailed_summary}</p>
+               <div className="premium-card p-5 md:p-8">
+                  <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4" style={{ color: 'var(--text-main)' }}>Detailed Analysis</h3>
+                  <p className="text-sm md:text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>{summary.detailed_summary}</p>
                </div>
 
                <div className="grid md:grid-cols-2 gap-6">
                   {summary.key_legal_points?.length > 0 && (
-                     <div className="premium-card p-6 border-t-4 border-t-emerald-500">
-                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
-                           <CheckCircle size={20} className="text-emerald-500" /> Key Legal Points
+                     <div className="premium-card p-5 md:p-6 border-t-4 border-t-emerald-500">
+                        <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
+                           <CheckCircle size={18} className="text-emerald-500" /> Key Legal Points
                         </h3>
-                        <ul className="space-y-3">
+                        <ul className="space-y-2 md:space-y-3">
                            {summary.key_legal_points.map((pt, i) => (
-                              <li key={i} className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-muted)' }}>
-                                 <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
-                                 <span className="mt-1">{pt}</span>
+                              <li key={i} className="flex items-start gap-3 text-xs md:text-sm" style={{ color: 'var(--text-muted)' }}>
+                                 <span className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 flex items-center justify-center text-[10px] md:text-xs font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
+                                 <span className="mt-0.5">{pt}</span>
                               </li>
                            ))}
                         </ul>
@@ -199,15 +201,15 @@ const Analysis: React.FC = () => {
                   )}
 
                   {summary.obligations?.length > 0 && (
-                     <div className="premium-card p-6 border-t-4 border-t-amber-500">
-                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
-                           <AlertCircle size={20} className="text-amber-500" /> Obligations
+                     <div className="premium-card p-5 md:p-6 border-t-4 border-t-amber-500">
+                        <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
+                           <AlertCircle size={18} className="text-amber-500" /> Obligations
                         </h3>
-                        <ul className="space-y-3">
+                        <ul className="space-y-2 md:space-y-3">
                            {summary.obligations.map((ob, i) => (
-                              <li key={i} className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-muted)' }}>
-                                 <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">!</span>
-                                 <span className="mt-1">{ob}</span>
+                              <li key={i} className="flex items-start gap-3 text-xs md:text-sm" style={{ color: 'var(--text-muted)' }}>
+                                 <span className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 flex items-center justify-center text-[10px] md:text-xs font-bold flex-shrink-0 mt-0.5">!</span>
+                                 <span className="mt-0.5">{ob}</span>
                               </li>
                            ))}
                         </ul>
@@ -294,14 +296,14 @@ const Analysis: React.FC = () => {
 
          {/* Plain English Tab */}
          {activeTab === 'simplified' && (
-            <div className="premium-card p-8 prose-legal max-w-none">
-               <div className="flex items-center gap-3 mb-6 pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400">
-                     <Zap size={20} />
+            <div className="premium-card p-5 md:p-8 prose-legal max-w-none">
+               <div className="flex items-center gap-3 mb-4 md:mb-6 pb-3 md:pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400">
+                     <Zap size={18} className="md:w-5 md:h-5" />
                   </div>
-                  <h3 className="font-bold text-xl" style={{ color: 'var(--text-main)' }}>Plain English Explanation</h3>
+                  <h3 className="font-bold text-lg md:text-xl" style={{ color: 'var(--text-main)' }}>Plain English Explanation</h3>
                </div>
-               <div className="text-lg leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+               <div className="text-base md:text-lg leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                      {summary.simplified_explanation || summary.short_summary}
                   </ReactMarkdown>

@@ -6,7 +6,7 @@ import UserOnboarding from '../components/UserOnboarding';
 
 const MainLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[var(--bg-app)]">
       <UserOnboarding />
       <Sidebar />
       <div className="flex-1 flex flex-col transition-all duration-300 md:ml-[260px]">
