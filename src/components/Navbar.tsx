@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
       }}
     >
       {/* Left Section: Menu for Mobile */}
-      <div className="flex items-center gap-2 md:gap-5">
+      <div className="md:hidden flex items-center gap-2">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 rounded-lg transition-colors hover:bg-[var(--bg-surface-hover)]"
