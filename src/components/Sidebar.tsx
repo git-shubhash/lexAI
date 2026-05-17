@@ -156,7 +156,7 @@ const Sidebar: React.FC = () => {
                 {getInitials(userName)}
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold truncate" style={{ color: 'var(--text-main)' }}>{userName || 'User'}</p>
+                <p className="text-sm font-bold truncate uppercase" style={{ color: 'var(--text-main)' }}>{userName || 'User'}</p>
                 <p className="text-[10px] uppercase font-black tracking-widest" style={{ color: 'var(--brand-main)' }}>Pro Plan</p>
               </div>
             </div>
